@@ -1,4 +1,4 @@
-package org.ticketshop.ticketshop;
+package org.ticketshop;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

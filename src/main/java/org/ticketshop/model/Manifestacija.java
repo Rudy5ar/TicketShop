@@ -1,10 +1,11 @@
-package org.ticketshop.ticketshop.model;
+package org.ticketshop.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Getter

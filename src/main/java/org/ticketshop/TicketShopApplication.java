@@ -1,4 +1,4 @@
-package org.ticketshop.ticketshop;
+package org.ticketshop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
