@@ -5,52 +5,33 @@ import org.ticketshop.model.Manifestation;
 import org.ticketshop.repository.ManifestationRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ManifestationService {
 
     private final ManifestationRepository manifestationRepository;
 
-    public ManifestationService(ManifestationRepository mr) {
-        this.manifestationRepository = mr;
+    public ManifestationService(ManifestationRepository manifestationRepository) {this.manifestationRepository = manifestationRepository;}
+
+    public Manifestation createManifestation(Manifestation manifestation) {
+        manifestationRepository.findById(manifestation.getId()).orElseThrow(() -> new RuntimeException("Entity not found"));
+        return manifestationRepository.save(manifestation);
     }
 
-    // Create
-    public Manifestation createManifestation(Manifestation m) {
-        return manifestationRepository.save(m);
-    }
-
-    public List<Manifestation> saveAllManifestacije(List<Manifestation> m) {
-        manifestationRepository.saveAll(m);
-        return m;
-    }
-
-    // Read
     public List<Manifestation> getAllManifestation() {
-        return (List<Manifestation>) manifestationRepository.findAll();
+        return manifestationRepository.findAll();
     }
 
     public Manifestation getManifestation(int id) {
-        Optional<Manifestation> m = manifestationRepository.findById(id);
-        return m.orElse(null);
+        return manifestationRepository.findById(id).orElseThrow(() -> new RuntimeException("Entity not found"));
     }
 
-    // Update
-    public Manifestation updateManifestation(Manifestation m) {
-        if (manifestationRepository.findById(m.getId()).isPresent()){
-            return manifestationRepository.save(m);
-        }
-        return null;
+    public Manifestation updateManifestation(Manifestation manifestation, int id) {
+        manifestationRepository.findById(id).orElseThrow(() -> new RuntimeException("Entity not found"));
+        return manifestationRepository.save(manifestation);
     }
 
-    // Delete
-    public boolean deleteManifestationById(int id) {
-        if (manifestationRepository.existsById(id)){
+    public void deleteManifestationById(int id) {
             manifestationRepository.deleteById(id);
-            return true;
-        }
-        return false;
     }
-
 }

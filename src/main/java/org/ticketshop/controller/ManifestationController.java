@@ -9,7 +9,7 @@ import org.ticketshop.service.ManifestationService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/manifestations")
+@RequestMapping("/api/manifestations")
 public class ManifestationController {
     private final ManifestationService manifestationService;
 
@@ -18,12 +18,13 @@ public class ManifestationController {
     }
 
     @PostMapping
-    public ResponseEntity<Manifestation> createManifestacija(@RequestBody Manifestation m) {
-        Manifestation mm = manifestationService.createManifestation(m);
-        if (mm != null) {
-            return new ResponseEntity<>(mm, HttpStatus.CREATED);
+    public ResponseEntity<Manifestation> createManifestation(@RequestBody Manifestation manifestation) {
+        try {
+            Manifestation savedManifestation = manifestationService.createManifestation(manifestation);
+            return new ResponseEntity<>(savedManifestation, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping
@@ -33,27 +34,26 @@ public class ManifestationController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Manifestation> getManifestation(@PathVariable int id) {
-        Manifestation m = manifestationService.getManifestation(id);
-        if(m != null){
-            return new ResponseEntity<>(m, HttpStatus.OK);
+        try {
+            Manifestation foundManifestation = manifestationService.getManifestation(id);
+            return new ResponseEntity<>(foundManifestation, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Manifestation> updateManifestacija(@RequestBody Manifestation m, @PathVariable int id) {
-        Manifestation mm = manifestationService.updateManifestation(m);
-        if (mm != null) {
-            return new ResponseEntity<>(mm, HttpStatus.CREATED);
+    public ResponseEntity<Manifestation> updateManifestation(@RequestBody Manifestation manifestation, @PathVariable int id) {
+        try {
+            Manifestation saved = manifestationService.updateManifestation(manifestation, id);
+            return new ResponseEntity<>(saved, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteManifestacijaById(@PathVariable int id) {
-        if(manifestationService.deleteManifestationById(id)){
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public void deleteManifestationById(@PathVariable int id) {
+        manifestationService.deleteManifestationById(id);
     }
 }
