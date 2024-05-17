@@ -42,6 +42,7 @@ public class Manifestation {
     @Column(name = "price_regular")
     private Integer price_regular;
 
+    @NotNull
     @Column(name = "status")
     private Integer status;
 

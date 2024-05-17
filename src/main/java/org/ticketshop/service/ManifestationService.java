@@ -14,7 +14,6 @@ public class ManifestationService {
     public ManifestationService(ManifestationRepository manifestationRepository) {this.manifestationRepository = manifestationRepository;}
 
     public Manifestation createManifestation(Manifestation manifestation) {
-        manifestationRepository.findById(manifestation.getId()).orElseThrow(() -> new RuntimeException("Entity not found"));
         return manifestationRepository.save(manifestation);
     }
 

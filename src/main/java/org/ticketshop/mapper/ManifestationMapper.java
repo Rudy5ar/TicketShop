@@ -16,10 +16,11 @@ public class ManifestationMapper {
         Manifestation m = new Manifestation();
         m.setName(dto.name());
         m.setType(dto.type());
-        m.setNum_of_seats(dto.numOfSeats());
-        m.setDate(dto.dateTime());
+        m.setNum_of_seats(dto.num_of_seats());
+        m.setDate(dto.date());
         m.setLocation(dto.location());
-        m.setPrice_regular(dto.price());
+        m.setPrice_regular(dto.price_regular());
+        m.setStatus(0);
         return m;
     }
 

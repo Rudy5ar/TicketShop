@@ -3,6 +3,8 @@ package org.ticketshop.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.ticketshop.dto.ManifestationDTO;
+import org.ticketshop.mapper.ManifestationMapper;
 import org.ticketshop.model.Manifestation;
 import org.ticketshop.service.ManifestationService;
 
@@ -12,15 +14,17 @@ import java.util.List;
 @RequestMapping("/api/manifestations")
 public class ManifestationController {
     private final ManifestationService manifestationService;
+    private final ManifestationMapper manifestationMapper;
 
-    public ManifestationController(ManifestationService ms){
-        this.manifestationService = ms;
+    public ManifestationController(ManifestationService service, ManifestationMapper mapper){
+        this.manifestationService = service;
+        this.manifestationMapper = mapper;
     }
 
     @PostMapping
-    public ResponseEntity<Manifestation> createManifestation(@RequestBody Manifestation manifestation) {
+    public ResponseEntity<Manifestation> createManifestation(@RequestBody ManifestationDTO manifestationDTO) {
         try {
-            Manifestation savedManifestation = manifestationService.createManifestation(manifestation);
+            Manifestation savedManifestation = manifestationService.createManifestation(manifestationMapper.fromDto(manifestationDTO));
             return new ResponseEntity<>(savedManifestation, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -43,9 +47,9 @@ public class ManifestationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Manifestation> updateManifestation(@RequestBody Manifestation manifestation, @PathVariable int id) {
+    public ResponseEntity<Manifestation> updateManifestation(@RequestBody ManifestationDTO manifestationDTO, @PathVariable int id) {
         try {
-            Manifestation saved = manifestationService.updateManifestation(manifestation, id);
+            Manifestation saved = manifestationService.updateManifestation(manifestationMapper.fromDto(manifestationDTO), id);
             return new ResponseEntity<>(saved, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
