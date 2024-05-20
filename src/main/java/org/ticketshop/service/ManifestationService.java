@@ -1,8 +1,10 @@
 package org.ticketshop.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.ticketshop.model.Manifestation;
 import org.ticketshop.repository.ManifestationRepository;
 
@@ -20,24 +22,30 @@ public class ManifestationService {
         return manifestationRepository.save(manifestation);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Manifestation> getAllManifestation() {
         return manifestationRepository.findAll();
     }
 
-    @Transactional
-    public Manifestation getManifestation(int id) {
+    @Transactional(readOnly = true)
+    public Manifestation getManifestation(Long id) {
         return manifestationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
     }
 
     @Transactional
-    public Manifestation updateManifestation(Manifestation manifestation, int id) {
+    public Manifestation updateManifestation(Manifestation manifestation, Long id) {
         manifestationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
         return manifestationRepository.save(manifestation);
     }
 
     @Transactional
-    public void deleteManifestationById(int id) {
+    public void deleteManifestationById(Long id) {
             manifestationRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Manifestation> getSorted(String sortBy) {
+        return manifestationRepository.findAll(PageRequest.of(0, 5, Sort.by(sortBy))).getContent();
+
     }
 }

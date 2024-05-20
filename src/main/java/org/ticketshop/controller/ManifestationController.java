@@ -37,7 +37,7 @@ public class ManifestationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Manifestation> getManifestation(@PathVariable int id) {
+    public ResponseEntity<Manifestation> getManifestation(@PathVariable Long id) {
         try {
             Manifestation foundManifestation = manifestationService.getManifestation(id);
             return new ResponseEntity<>(foundManifestation, HttpStatus.OK);
@@ -47,7 +47,7 @@ public class ManifestationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Manifestation> updateManifestation(@RequestBody ManifestationDTO manifestationDTO, @PathVariable int id) {
+    public ResponseEntity<Manifestation> updateManifestation(@RequestBody ManifestationDTO manifestationDTO, @PathVariable Long id) {
         try {
             Manifestation saved = manifestationService.updateManifestation(manifestationMapper.fromDto(manifestationDTO), id);
             return new ResponseEntity<>(saved, HttpStatus.OK);
@@ -57,7 +57,12 @@ public class ManifestationController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteManifestationById(@PathVariable int id) {
+    public void deleteManifestationById(@PathVariable Long id) {
         manifestationService.deleteManifestationById(id);
+    }
+
+    @GetMapping("/getSorted/{sortBy}")
+    public ResponseEntity<List<Manifestation>> getSortedManifestation(@PathVariable String sortBy) {
+        return new ResponseEntity<>(manifestationService.getSorted(sortBy), HttpStatus.OK);
     }
 }
