@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ManifestationRepository extends JpaRepository<Manifestation, Long> {
 
+    List<Manifestation> findByType(int type);
+
 }

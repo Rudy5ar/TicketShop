@@ -1,5 +1,6 @@
 package org.ticketshop.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,8 +62,10 @@ public class ManifestationController {
         manifestationService.deleteManifestationById(id);
     }
 
-    @GetMapping("/getSorted/{sortBy}")
-    public ResponseEntity<List<Manifestation>> getSortedManifestation(@PathVariable String sortBy) {
-        return new ResponseEntity<>(manifestationService.getSorted(sortBy), HttpStatus.OK);
+    @GetMapping("/getSorted/{sortBy}{pageNumber}{pageSize}")
+    public ResponseEntity<List<Manifestation>> getSortedManifestation(@PathVariable("sortBy") String sortBy,
+                                                                      @PathVariable("pageNumber") int pageNumber,
+                                                                      @PathVariable("pageSize") int pageSize) {
+        return new ResponseEntity<>(manifestationService.getSorted(sortBy, pageNumber, pageSize), HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package org.ticketshop.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +45,10 @@ public class ManifestationService {
     }
 
     @Transactional(readOnly = true)
-    public List<Manifestation> getSorted(String sortBy) {
-        return manifestationRepository.findAll(PageRequest.of(0, 5, Sort.by(sortBy))).getContent();
-
+    public List<Manifestation> getSorted(String sortBy, int pageNumber, int pageSize) {
+        if (sortBy.equals("name") || sortBy.equals("priceRegular") || sortBy.equals("date") || sortBy.equals("location")) {
+            return manifestationRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(sortBy))).getContent();
+        }
+        return null;
     }
 }
