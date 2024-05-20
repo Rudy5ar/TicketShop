@@ -7,19 +7,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "manifestation")
 public class Manifestation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Size(max = 45)
     @Column(name = "name", length = 45)
@@ -31,16 +35,16 @@ public class Manifestation {
     private Integer type;
 
     @NotNull
-    @Column(name = "num_of_seats")
-    private Integer num_of_seats;
+    @Column(name = "numOfSeats")
+    private Integer numOfSeats;
 
     @NotNull
     @Column(name = "date")
     private LocalDateTime date;
 
     @NotNull
-    @Column(name = "price_regular")
-    private Integer price_regular;
+    @Column(name = "priceRegular")
+    private Integer priceRegular;
 
     @NotNull
     @Column(name = "status")

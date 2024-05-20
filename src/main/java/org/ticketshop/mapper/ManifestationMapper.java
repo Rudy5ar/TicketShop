@@ -8,20 +8,11 @@ import org.ticketshop.model.Manifestation;
 public class ManifestationMapper {
 
     public ManifestationDTO toDto(Manifestation m) {
-        return new ManifestationDTO(m.getName(), m.getType(), m.getNum_of_seats(),
-                m.getDate(), m.getPrice_regular(), m.getLocation());
+        return ManifestationDTO.builder().name(m.getName()).numOfSeats(m.getNumOfSeats()).priceRegular(m.getPriceRegular()).date(m.getDate()).type(m.getType()).location(m.getLocation()).build();
+        // return new ManifestationDTO(m.getName(), m.getType(), m.getNumOfSeats(), m.getDate(), m.getPriceRegular(), m.getLocation());
     }
 
     public Manifestation fromDto(ManifestationDTO dto) {
-        Manifestation m = new Manifestation();
-        m.setName(dto.name());
-        m.setType(dto.type());
-        m.setNum_of_seats(dto.num_of_seats());
-        m.setDate(dto.date());
-        m.setLocation(dto.location());
-        m.setPrice_regular(dto.price_regular());
-        m.setStatus(0);
-        return m;
+        return Manifestation.builder().name(dto.name()).numOfSeats(dto.numOfSeats()).priceRegular(dto.priceRegular()).location(dto.location()).date(dto.date()).build();
     }
-
 }
