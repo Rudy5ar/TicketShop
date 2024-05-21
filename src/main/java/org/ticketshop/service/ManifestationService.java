@@ -46,9 +46,9 @@ public class ManifestationService {
     }
 
     @Transactional(readOnly = true)
-    public List<Manifestation> getSorted(String sortBy, int pageNumber, int pageSize) {
+    public Page<Manifestation> getSortedPage(String sortBy, int pageNumber, int pageSize) {
         if (sortBy.equals("name") || sortBy.equals("priceRegular") || sortBy.equals("date") || sortBy.equals("location")) {
-            return manifestationRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(sortBy))).getContent();
+            return manifestationRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(sortBy)));
         }
         return null;
     }
