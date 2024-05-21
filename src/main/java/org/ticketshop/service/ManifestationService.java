@@ -1,6 +1,7 @@
 package org.ticketshop.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -53,7 +54,13 @@ public class ManifestationService {
     }
 
     @Transactional(readOnly = true)
-    public List<Manifestation> getByType(int type) {
-        return manifestationRepository.findByType(type);
+    public List<Manifestation> filterByType(List<Manifestation> listOfManifestations, int type) {
+        return listOfManifestations.stream().filter(m -> m.getType() == type).toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<Manifestation> searchByName(String name, int pageNumber, int pageSize) {
+        return manifestationRepository.findAllByName(name, PageRequest.of(pageNumber, pageSize));
+    }
+
 }

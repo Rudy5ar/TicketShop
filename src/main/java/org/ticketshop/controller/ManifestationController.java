@@ -62,15 +62,26 @@ public class ManifestationController {
         manifestationService.deleteManifestationById(id);
     }
 
-    @GetMapping("/getSorted/{sortBy}{pageNumber}{pageSize}")
-    public ResponseEntity<List<Manifestation>> getSortedManifestation(@PathVariable("sortBy") String sortBy,
-                                                                      @PathVariable("pageNumber") int pageNumber,
-                                                                      @PathVariable("pageSize") int pageSize) {
+    @GetMapping("/getSorted")
+    public ResponseEntity<List<Manifestation>> getSortedManifestation(@RequestParam("sortBy") String sortBy,
+                                                                      @RequestParam("pageNumber") int pageNumber,
+                                                                      @RequestParam("pageSize") int pageSize) {
         return new ResponseEntity<>(manifestationService.getSorted(sortBy, pageNumber, pageSize), HttpStatus.OK);
     }
 
-    @GetMapping("/getFilteredByType/{type}")
-    public ResponseEntity<List<Manifestation>> getFilteredByType(@PathVariable int type){
-        return new ResponseEntity<>(manifestationService.getByType(type), HttpStatus.OK);
+    @GetMapping("/getFilteredByType")
+    public ResponseEntity<List<Manifestation>> filterByType(@RequestParam("type") int type){
+        return new ResponseEntity<>(manifestationService.
+                                    filterByType(manifestationService.getAllManifestation(), type),
+                    HttpStatus.OK);
+    }
+
+    @GetMapping("/searchByName")
+    public ResponseEntity<List<Manifestation>> searchByName(@RequestParam("name") String name,
+                                                            @RequestParam("pageNumber") int pageNumber,
+                                                            @RequestParam("pageSize") int pageSize) {
+
+        return new ResponseEntity<>(manifestationService.searchByName(name, pageNumber, pageSize), HttpStatus.OK);
+
     }
 }
