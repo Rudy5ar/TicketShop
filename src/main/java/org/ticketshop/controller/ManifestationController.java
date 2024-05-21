@@ -68,4 +68,9 @@ public class ManifestationController {
                                                                       @PathVariable("pageSize") int pageSize) {
         return new ResponseEntity<>(manifestationService.getSorted(sortBy, pageNumber, pageSize), HttpStatus.OK);
     }
+
+    @GetMapping("/getFilteredByType/{type}")
+    public ResponseEntity<List<Manifestation>> getFilteredByType(@PathVariable int type){
+        return new ResponseEntity<>(manifestationService.getByType(type), HttpStatus.OK);
+    }
 }

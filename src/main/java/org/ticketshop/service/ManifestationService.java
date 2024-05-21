@@ -51,4 +51,9 @@ public class ManifestationService {
         }
         return null;
     }
+
+    @Transactional(readOnly = true)
+    public List<Manifestation> getByType(int type) {
+        return manifestationRepository.findByType(type);
+    }
 }
