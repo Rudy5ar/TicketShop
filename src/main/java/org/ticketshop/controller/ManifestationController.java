@@ -1,5 +1,6 @@
 package org.ticketshop.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,9 +64,9 @@ public class ManifestationController {
     }
 
     @GetMapping("/getSorted/{sortBy}{pageNumber}{pageSize}")
-    public ResponseEntity<List<Manifestation>> getSortedManifestation(@PathVariable("sortBy") String sortBy,
+    public ResponseEntity<Page<Manifestation>> getSortedManifestation(@PathVariable("sortBy") String sortBy,
                                                                       @PathVariable("pageNumber") int pageNumber,
                                                                       @PathVariable("pageSize") int pageSize) {
-        return new ResponseEntity<>(manifestationService.getSorted(sortBy, pageNumber, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(manifestationService.getSortedPage(sortBy, pageNumber, pageSize), HttpStatus.OK);
     }
 }
