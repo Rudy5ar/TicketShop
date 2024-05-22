@@ -1,5 +1,7 @@
 package org.ticketshop.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +39,7 @@ public class ManifestationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Manifestation> getManifestation(@PathVariable int id) {
+    public ResponseEntity<Manifestation> getManifestation(@PathVariable Long id) {
         try {
             Manifestation foundManifestation = manifestationService.getManifestation(id);
             return new ResponseEntity<>(foundManifestation, HttpStatus.OK);
@@ -47,7 +49,7 @@ public class ManifestationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Manifestation> updateManifestation(@RequestBody ManifestationDTO manifestationDTO, @PathVariable int id) {
+    public ResponseEntity<Manifestation> updateManifestation(@RequestBody ManifestationDTO manifestationDTO, @PathVariable Long id) {
         try {
             Manifestation saved = manifestationService.updateManifestation(manifestationMapper.fromDto(manifestationDTO), id);
             return new ResponseEntity<>(saved, HttpStatus.OK);
@@ -57,7 +59,14 @@ public class ManifestationController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteManifestationById(@PathVariable int id) {
+    public void deleteManifestationById(@PathVariable Long id) {
         manifestationService.deleteManifestationById(id);
+    }
+
+    @GetMapping("/getSorted/{sortBy}{pageNumber}{pageSize}")
+    public ResponseEntity<Page<Manifestation>> getSortedManifestation(@PathVariable("sortBy") String sortBy,
+                                                                      @PathVariable("pageNumber") int pageNumber,
+                                                                      @PathVariable("pageSize") int pageSize) {
+        return new ResponseEntity<>(manifestationService.getSortedPage(sortBy, pageNumber, pageSize), HttpStatus.OK);
     }
 }
