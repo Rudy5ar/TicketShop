@@ -52,4 +52,15 @@ public class ManifestationService {
         }
         return null;
     }
+
+    @Transactional(readOnly = true)
+    public List<Manifestation> filterByType(List<Manifestation> listOfManifestations, int type) {
+        return listOfManifestations.stream().filter(m -> m.getType() == type).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Manifestation> searchByName(String name, int pageNumber, int pageSize) {
+        return manifestationRepository.findAllByName(name, PageRequest.of(pageNumber, pageSize));
+    }
+
 }
