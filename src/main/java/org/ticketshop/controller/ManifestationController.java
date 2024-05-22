@@ -63,26 +63,17 @@ public class ManifestationController {
         manifestationService.deleteManifestationById(id);
     }
 
-    @GetMapping("/getSorted")
-    public ResponseEntity<List<Manifestation>> getSortedManifestation(@RequestParam("sortBy") String sortBy,
-                                                                      @RequestParam("pageNumber") int pageNumber,
-                                                                      @RequestParam("pageSize") int pageSize) {
-        return new ResponseEntity<>(manifestationService.getSorted(sortBy, pageNumber, pageSize), HttpStatus.OK);
-    }
-
-    @GetMapping("/getFilteredByType")
-    public ResponseEntity<List<Manifestation>> filterByType(@RequestParam("type") int type){
-        return new ResponseEntity<>(manifestationService.
-                                    filterByType(manifestationService.getAllManifestation(), type),
-                    HttpStatus.OK);
-    }
-
-    @GetMapping("/searchByName")
-    public ResponseEntity<List<Manifestation>> searchByName(@RequestParam("name") String name,
+    @GetMapping("/search")
+    public ResponseEntity<List<Manifestation>> search(@RequestParam(value = "name", required = false) String name,
+                                                            @RequestParam(value = "priceLow", required = false) Integer priceLow,
+                                                            @RequestParam(value = "priceHigh", required = false) Integer priceHigh,
+                                                            @RequestParam(value = "sortBy", required = false) String sortBy,
+                                                            @RequestParam(value = "filterType", required = false) String filterType,
                                                             @RequestParam("pageNumber") int pageNumber,
-                                                            @RequestParam("pageSize") int pageSize) {
+                                                            @RequestParam("pageSize") int pageSize,
+                                                            @RequestParam(value = "isDescending", required = false) boolean isDescending) {
 
-        return new ResponseEntity<>(manifestationService.searchByName(name, pageNumber, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(manifestationService.search(name, priceLow, priceHigh, sortBy, filterType, pageNumber, pageSize, isDescending), HttpStatus.OK);
 
     }
 }

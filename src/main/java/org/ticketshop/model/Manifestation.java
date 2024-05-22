@@ -32,7 +32,7 @@ public class Manifestation {
 
     @NotNull
     @Column(name = "type")
-    private Integer type;
+    private String type;
 
     @NotNull
     @Column(name = "numOfSeats")

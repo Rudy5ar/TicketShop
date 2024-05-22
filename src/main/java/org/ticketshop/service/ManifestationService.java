@@ -26,7 +26,7 @@ public class ManifestationService {
 
     @Transactional(readOnly = true)
     public List<Manifestation> getAllManifestation() {
-        return manifestationRepository.findAll();
+        return manifestationRepository.findAll().reversed();
     }
 
     @Transactional(readOnly = true)
@@ -46,21 +46,33 @@ public class ManifestationService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Manifestation> getSortedPage(String sortBy, int pageNumber, int pageSize) {
-        if (sortBy.equals("name") || sortBy.equals("priceRegular") || sortBy.equals("date") || sortBy.equals("location")) {
-            return manifestationRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(sortBy)));
+    public List<Manifestation> search(String name, Integer priceLow, Integer priceHigh, String sortBy, String filterType, int pageNumber, int pageSize, boolean isDescending) {
+        List<Manifestation> manifestations = null;
+
+        if (sortBy == null || !(sortBy.equals("name") || sortBy.equals("priceRegular") || sortBy.equals("date") || sortBy.equals("location"))) {
+            sortBy = "id";
         }
-        return null;
-    }
 
-    @Transactional(readOnly = true)
-    public List<Manifestation> filterByType(List<Manifestation> listOfManifestations, int type) {
-        return listOfManifestations.stream().filter(m -> m.getType() == type).toList();
-    }
 
-    @Transactional(readOnly = true)
-    public List<Manifestation> searchByName(String name, int pageNumber, int pageSize) {
-        return manifestationRepository.findAllByName(name, PageRequest.of(pageNumber, pageSize));
+        if(name == null && (priceLow == null || priceHigh == null)){
+            manifestations = manifestationRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(sortBy))).toList();
+        }
+        else if(name != null && (priceLow == null || priceHigh == null)){
+            manifestations = manifestationRepository.findAllByNameStartingWith(name, PageRequest.of(pageNumber, pageSize, Sort.by(sortBy))).toList();
+        }
+        else {
+            manifestations = manifestationRepository.findAllByPriceRegularBetween(priceLow, priceHigh, PageRequest.of(pageNumber, pageSize, Sort.by(sortBy))).toList();
+        }
+
+
+        if(filterType != null){
+            manifestations = manifestations.stream().filter(m -> m.getType().equals(filterType)).toList();
+        }
+
+        if(isDescending){
+            return manifestations.reversed();
+        }
+        return manifestations;
     }
 
 }
