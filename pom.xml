@@ -51,6 +51,15 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -67,18 +76,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-maven-plugin</artifactId>
-				<version>10.13.0</version>
-				<configuration>
-					<user>root</user>
-					<password>1234</password>
-					<schemas>
-						<schema>ticketShop</schema>
-					</schemas>
-				</configuration>
-			</plugin>
+
 		</plugins>
 	</build>
 

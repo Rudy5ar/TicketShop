@@ -35,7 +35,7 @@ public class Manifestation {
     private String type;
 
     @NotNull
-    @Column(name = "numOfSeats")
+    @Column(name = "num_of_seats")
     private Integer numOfSeats;
 
     @NotNull
@@ -43,7 +43,7 @@ public class Manifestation {
     private LocalDateTime date;
 
     @NotNull
-    @Column(name = "priceRegular")
+    @Column(name = "price_regular")
     private Integer priceRegular;
 
     @NotNull

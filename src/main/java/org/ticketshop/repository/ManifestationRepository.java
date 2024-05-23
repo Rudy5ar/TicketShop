@@ -10,6 +10,5 @@ import java.util.List;
 
 public interface ManifestationRepository extends JpaRepository<Manifestation, Long> {
 
-    Page<Manifestation> findAllByNameStartingWith(String name, Pageable pageable);
-    Page<Manifestation> findAllByPriceRegularBetween(int lower, int upper, Pageable pageable);
+    Page<Manifestation> findAllByNameStartingWithAndTypeStartingWithAndPriceRegularBetween(String name, String type, int lower, int upper, Pageable pageable);
 }

@@ -6,11 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.ticketshop.dto.ManifestationDTO;
+import org.ticketshop.dto.SearchDTO;
 import org.ticketshop.mapper.ManifestationMapper;
 import org.ticketshop.model.Manifestation;
 import org.ticketshop.service.ManifestationService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/manifestations")
@@ -64,16 +66,10 @@ public class ManifestationController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Manifestation>> search(@RequestParam(value = "name", required = false) String name,
-                                                            @RequestParam(value = "priceLow", required = false) Integer priceLow,
-                                                            @RequestParam(value = "priceHigh", required = false) Integer priceHigh,
-                                                            @RequestParam(value = "sortBy", required = false) String sortBy,
-                                                            @RequestParam(value = "filterType", required = false) String filterType,
+    public ResponseEntity<Page<Manifestation>> search(@RequestBody SearchDTO searchDTO,
                                                             @RequestParam("pageNumber") int pageNumber,
-                                                            @RequestParam("pageSize") int pageSize,
-                                                            @RequestParam(value = "isDescending", required = false) boolean isDescending) {
-
-        return new ResponseEntity<>(manifestationService.search(name, priceLow, priceHigh, sortBy, filterType, pageNumber, pageSize, isDescending), HttpStatus.OK);
+                                                            @RequestParam("pageSize") int pageSize) {
+        return new ResponseEntity<>(manifestationService.search(searchDTO, pageNumber, pageSize), HttpStatus.OK);
 
     }
 }

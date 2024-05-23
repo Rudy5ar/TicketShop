@@ -1,16 +1,15 @@
 package org.ticketshop.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ticketshop.dto.SearchDTO;
 import org.ticketshop.model.Manifestation;
 import org.ticketshop.repository.ManifestationRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ManifestationService {
@@ -46,33 +45,19 @@ public class ManifestationService {
     }
 
     @Transactional(readOnly = true)
-    public List<Manifestation> search(String name, Integer priceLow, Integer priceHigh, String sortBy, String filterType, int pageNumber, int pageSize, boolean isDescending) {
-        List<Manifestation> manifestations = null;
-
-        if (sortBy == null || !(sortBy.equals("name") || sortBy.equals("priceRegular") || sortBy.equals("date") || sortBy.equals("location"))) {
-            sortBy = "id";
-        }
-
-
-        if(name == null && (priceLow == null || priceHigh == null)){
-            manifestations = manifestationRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(sortBy))).toList();
-        }
-        else if(name != null && (priceLow == null || priceHigh == null)){
-            manifestations = manifestationRepository.findAllByNameStartingWith(name, PageRequest.of(pageNumber, pageSize, Sort.by(sortBy))).toList();
-        }
-        else {
-            manifestations = manifestationRepository.findAllByPriceRegularBetween(priceLow, priceHigh, PageRequest.of(pageNumber, pageSize, Sort.by(sortBy))).toList();
-        }
+    public Page<Manifestation> search(SearchDTO searchDTO, int pageNumber, int pageSize) {
+        String sortBy = searchDTO.sortBy()
+                .filter(sort -> sort.equals("name") || sort.equals("priceRegular") || sort.equals("date") || sort.equals("location") )
+                .orElse("id");
+        Sort.Direction direction = searchDTO.isDescending() ? Sort.Direction.DESC : Sort.Direction.ASC;
 
 
-        if(filterType != null){
-            manifestations = manifestations.stream().filter(m -> m.getType().equals(filterType)).toList();
-        }
-
-        if(isDescending){
-            return manifestations.reversed();
-        }
-        return manifestations;
+        return manifestationRepository.findAllByNameStartingWithAndTypeStartingWithAndPriceRegularBetween(
+                                                        searchDTO.name().orElse("")
+                                                        ,searchDTO.filterType().orElse("")
+                                                        ,searchDTO.priceLow().orElse(Integer.MIN_VALUE)
+                                                        ,searchDTO.priceHigh().orElse(Integer.MAX_VALUE)
+                                                        ,PageRequest.of(pageNumber, pageSize, direction, sortBy));
     }
 
 }
