@@ -16,25 +16,35 @@ CREATE TABLE IF NOT EXISTS `ticket_shop`.`Manifestation`
     `date`          DATETIME    NOT NULL,
     `price_regular` DECIMAL     NOT NULL,
     `status`        INT         NOT NULL,
-    `location`      VARCHAR(45) NOT NULL
+    `location_id`   BIGINT      NOT NULL,
+    `user_id`       BIGINT      NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `ticket_shop`.`User`
 (
-    `id`            BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `username`      VARCHAR(45) NOT NULL,
-    `password`      VARCHAR(45) NOT NULL,
-    `first_name`    VARCHAR(45) NOT NULL,
-    `last_name`     VARCHAR(45) NOT NULL,
-    `reward_points` INT         NULL,
-    `user_type`     VARCHAR(45) NOT NULL
+    `id`               BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `username`         VARCHAR(45) NOT NULL,
+    `password`         VARCHAR(45) NOT NULL,
+    `first_name`       VARCHAR(45) NOT NULL,
+    `last_name`        VARCHAR(45) NOT NULL,
+    `reward_points`    INT         NULL,
+    `user_type`        VARCHAR(45) NOT NULL,
+    `manifestation_id` BIGINT      NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `ticket_shop`.`Ticket`
 (
-    `id`     BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `date`   DATETIME    NOT NULL,
-    `price`  DECIMAL     NOT NULL,
-    `status` INT         NOT NULL,
-    `type`   VARCHAR(45) NOT NULL
-)
+    `id`               BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `date`             DATETIME    NOT NULL,
+    `price`            DECIMAL     NOT NULL,
+    `status`           INT         NOT NULL,
+    `type`             VARCHAR(45) NOT NULL,
+    `manifestation_id` BIGINT      NOT NULL,
+    `user_id`          BIGINT      NOT NULL
+);
+
+ALTER TABLE `User` ADD FOREIGN KEY (manifestation_id) REFERENCES Manifestation (`id`);
+ALTER TABLE `Manifestation` ADD FOREIGN KEY (user_id) REFERENCES User (`id`);
+ALTER TABLE `Manifestation` ADD FOREIGN KEY (location_id) REFERENCES Location (`id`);
+ALTER TABLE `Ticket` ADD FOREIGN KEY (manifestation_id) REFERENCES Manifestation (`id`);
+ALTER TABLE `Ticket` ADD FOREIGN KEY (user_id) REFERENCES User (`id`);
