@@ -7,4 +7,4 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ManifestationDTO(String name, String type, int numOfSeats,
-                               LocalDateTime date, BigDecimal priceRegular, String location) {}
+                               LocalDateTime date, BigDecimal priceRegular) {}

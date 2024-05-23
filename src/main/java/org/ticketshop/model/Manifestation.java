@@ -6,8 +6,11 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,7 +23,7 @@ public class Manifestation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private BigDecimal id;
 
     @Size(max = 45)
     @NotNull
@@ -48,20 +51,15 @@ public class Manifestation {
     @Column(name = "status", nullable = false)
     private Integer status;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "location_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
     private Location location;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id_seller")
+    private User userIdSeller;
 
     @OneToMany(mappedBy = "manifestation")
     private List<Ticket> tickets;
-
-    @OneToMany(mappedBy = "manifestation")
-    private List<User> users;
 
 }

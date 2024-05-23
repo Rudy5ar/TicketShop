@@ -1,11 +1,12 @@
 package org.ticketshop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,17 +19,39 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private BigDecimal id;
 
+    @Size(max = 45)
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "manifestation_id", nullable = false)
-    private Manifestation manifestation;
+    @Column(name = "username", nullable = false, length = 45)
+    private String username;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Manifestation> manifestations = new LinkedHashSet<>();
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "password", nullable = false, length = 45)
+    private String password;
 
-    @JsonIgnore
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "first_name", nullable = false, length = 45)
+    private String firstName;
+
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "last_name", nullable = false, length = 45)
+    private String lastName;
+
+    @Column(name = "reward_points")
+    private Integer rewardPoints;
+
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "user_type", nullable = false, length = 45)
+    private String userType;
+
+    @OneToMany(mappedBy = "userIdSeller")
+    private List<Manifestation> manifestations;
+
     @OneToMany(mappedBy = "user")
     private List<Ticket> tickets;
 

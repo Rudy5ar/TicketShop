@@ -3,7 +3,6 @@ package org.ticketshop.mapper;
 import org.springframework.stereotype.Component;
 import org.ticketshop.dto.ManifestationDTO;
 import org.ticketshop.model.Manifestation;
-import org.ticketshop.service.ManifestationService;
 
 @Component
 public class ManifestationMapper {
@@ -15,7 +14,6 @@ public class ManifestationMapper {
                 .priceRegular(m.getPriceRegular())
                 .date(m.getDate())
                 .type(m.getType())
-                .location(m.getLocation().getAddress())
                 .build();
     }
 
