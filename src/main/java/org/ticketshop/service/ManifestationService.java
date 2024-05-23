@@ -9,7 +9,6 @@ import org.ticketshop.model.Manifestation;
 import org.ticketshop.repository.ManifestationRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ManifestationService {

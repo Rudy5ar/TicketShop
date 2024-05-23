@@ -1,7 +1,6 @@
 package org.ticketshop.controller;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,6 @@ import org.ticketshop.model.Manifestation;
 import org.ticketshop.service.ManifestationService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/manifestations")
@@ -36,8 +34,9 @@ public class ManifestationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Manifestation>> getAllManifestation() {
-        return new ResponseEntity<>(manifestationService.getAllManifestation(), HttpStatus.OK);
+    public ResponseEntity<List<ManifestationDTO>> getAllManifestation() {
+        ManifestationMapper mapper = new ManifestationMapper();
+        return new ResponseEntity<>(manifestationService.getAllManifestation().stream().map(mapper::toDto).toList(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

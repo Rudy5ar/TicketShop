@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS `ticket_shop`.`Manifestation`
     `date`          DATETIME    NOT NULL,
     `price_regular` DECIMAL     NOT NULL,
     `status`        INT         NOT NULL,
-    `location_id`   BIGINT      NOT NULL,
-    `user_id`       BIGINT      NOT NULL
+    `location_id`   BIGINT,
+    `user_id`       BIGINT
 );
 
 CREATE TABLE IF NOT EXISTS `ticket_shop`.`User`
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `ticket_shop`.`User`
     `last_name`        VARCHAR(45) NOT NULL,
     `reward_points`    INT         NULL,
     `user_type`        VARCHAR(45) NOT NULL,
-    `manifestation_id` BIGINT      NOT NULL
+    `manifestation_id` BIGINT
 );
 
 CREATE TABLE IF NOT EXISTS `ticket_shop`.`Ticket`
@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS `ticket_shop`.`Ticket`
     `price`            DECIMAL     NOT NULL,
     `status`           INT         NOT NULL,
     `type`             VARCHAR(45) NOT NULL,
-    `manifestation_id` BIGINT      NOT NULL,
-    `user_id`          BIGINT      NOT NULL
+    `manifestation_id` BIGINT,
+    `user_id`          BIGINT
 );
 
 ALTER TABLE `User` ADD FOREIGN KEY (manifestation_id) REFERENCES Manifestation (`id`);
