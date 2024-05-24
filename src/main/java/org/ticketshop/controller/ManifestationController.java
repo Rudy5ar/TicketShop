@@ -35,15 +35,13 @@ public class ManifestationController {
 
     @GetMapping
     public ResponseEntity<List<ManifestationDTO>> getAllManifestation() {
-        ManifestationMapper mapper = new ManifestationMapper();
-        return new ResponseEntity<>(manifestationService.getAllManifestation().stream().map(mapper::toDto).toList(), HttpStatus.OK);
+        return new ResponseEntity<>(manifestationService.getAllManifestation().stream().map(manifestationMapper::toDto).toList(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Manifestation> getManifestation(@PathVariable Long id) {
         try {
-            Manifestation foundManifestation = manifestationService.getManifestation(id);
-            return new ResponseEntity<>(foundManifestation, HttpStatus.OK);
+            return new ResponseEntity<>(manifestationService.getManifestation(id), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
