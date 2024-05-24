@@ -18,9 +18,9 @@ public class LocationController {
     private final LocationService locationService;
     private final LocationMapper locationMapper;
 
-    public LocationController(LocationService locationService) {
+    public LocationController(LocationService locationService, LocationMapper locationMapper) {
         this.locationService = locationService;
-        this.locationMapper = new LocationMapper();
+        this.locationMapper = locationMapper;
     }
 
     @GetMapping("/{id}")

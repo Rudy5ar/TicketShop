@@ -20,7 +20,7 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private BigDecimal id;
+    private Long id;
 
     @NotNull
     @Column(name = "date", nullable = false)
