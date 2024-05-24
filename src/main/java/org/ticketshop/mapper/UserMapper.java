@@ -7,7 +7,7 @@ import org.ticketshop.model.User;
 @Component
 public class UserMapper {
 
-    public UserDTO toDTO(User user) {
+    public UserDTO toDto(User user) {
         return UserDTO.builder()
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -18,7 +18,7 @@ public class UserMapper {
                 .build();
     }
 
-    public User toUser(UserDTO userDTO) {
+    public User fromDto(UserDTO userDTO) {
         return User.builder()
                 .firstName(userDTO.firstName())
                 .lastName(userDTO.lastName())
