@@ -41,7 +41,7 @@ public class User {
     @Column(name = "user_type", nullable = false, length = 45)
     private String userType;
 
-    @OneToMany(mappedBy = "userIdSeller")
+    @OneToMany(mappedBy = "userSeller")
     private List<Manifestation> manifestations;
 
     @OneToMany(mappedBy = "user")

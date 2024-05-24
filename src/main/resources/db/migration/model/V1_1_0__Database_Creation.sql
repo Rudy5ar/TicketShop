@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `ticket_shop`.`Location`
+CREATE TABLE IF NOT EXISTS `Location`
 (
     `id`        BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `longitude` DOUBLE       NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `ticket_shop`.`Location`
 );
 
 
-CREATE TABLE IF NOT EXISTS `ticket_shop`.`Manifestation`
+CREATE TABLE IF NOT EXISTS `Manifestation`
 (
     `id`             BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name`           VARCHAR(45) NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `ticket_shop`.`Manifestation`
     `user_id_seller` BIGINT
 );
 
-CREATE TABLE IF NOT EXISTS `ticket_shop`.`User`
+CREATE TABLE IF NOT EXISTS `User`
 (
     `id`            BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `username`      VARCHAR(45) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `ticket_shop`.`User`
     `user_type`     VARCHAR(45) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS `ticket_shop`.`Ticket`
+CREATE TABLE IF NOT EXISTS `Ticket`
 (
     `id`               BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `date`             DATETIME    NOT NULL,
@@ -49,4 +49,4 @@ ALTER TABLE `Manifestation`
 ALTER TABLE `Ticket`
     ADD FOREIGN KEY (manifestation_id) REFERENCES Manifestation (`id`);
 ALTER TABLE `Ticket`
-    ADD FOREIGN KEY (user_id) REFERENCES User (`id`);
+    ADD FOREIGN KEY (user_id_buyer) REFERENCES User (`id`);

@@ -34,11 +34,7 @@ public class LocationService {
 
     @Transactional
     public Location updateLocation(Long id, Location location){
-<<<<<<< Updated upstream
-        locationRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("No location found with id: " + id));
-=======
         getLocation(id);
->>>>>>> Stashed changes
         return locationRepository.save(location);
     }
 

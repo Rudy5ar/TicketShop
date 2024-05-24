@@ -48,7 +48,7 @@ public class Ticket {
     private Manifestation manifestation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id_buyer")
     private User user;
 
 }
