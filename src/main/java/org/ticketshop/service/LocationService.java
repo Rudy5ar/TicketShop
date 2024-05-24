@@ -17,12 +17,12 @@ public class LocationService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Location> getLocations(Pageable page){
+    public Page<Location> getAllLocations(Pageable page){
         return locationRepository.findAll(page);
     }
 
     @Transactional(readOnly = true)
-    public Location getLocation(Long id){
+    public Location getLocationById(Long id){
         return locationRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No location found with id: " + id));
     }
 
