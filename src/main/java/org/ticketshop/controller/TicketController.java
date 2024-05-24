@@ -41,8 +41,8 @@ public class TicketController {
     @PostMapping
     public ResponseEntity<TicketDTO> createTicket(@RequestBody TicketDTO ticketDTO) {
         try {
-            Ticket savedLocation = ticketService.saveTicket(ticketMapper.fromDto(ticketDTO));
-            return new ResponseEntity<>(ticketMapper.toDto(savedLocation), HttpStatus.OK);
+            Ticket savedTicket = ticketService.saveTicket(ticketMapper.fromDto(ticketDTO));
+            return new ResponseEntity<>(ticketMapper.toDto(savedTicket), HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
