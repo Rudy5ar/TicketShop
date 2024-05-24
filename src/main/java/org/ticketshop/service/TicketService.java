@@ -1,5 +1,6 @@
 package org.ticketshop.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class TicketService {
 
     @Transactional(readOnly = true)
     public Ticket getTicketById(Long id) {
-        return ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
+        return ticketRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
     }
 
     @Transactional
@@ -34,7 +35,7 @@ public class TicketService {
 
     @Transactional
     public Ticket updateTicket(Long id, Ticket ticket) {
-        ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
+        getTicketById(id);
         return ticketRepository.save(ticket);
     }
 

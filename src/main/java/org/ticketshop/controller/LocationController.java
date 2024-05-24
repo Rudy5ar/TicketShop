@@ -26,7 +26,7 @@ public class LocationController {
     @GetMapping("/{id}")
     public ResponseEntity<LocationDTO> getLocation(@PathVariable long id) {
         try {
-            return new ResponseEntity<>(locationMapper.toDto(locationService.getLocationById(id)), HttpStatus.OK);
+            return new ResponseEntity<>(locationMapper.toDto(locationService.getLocation(id)), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -34,7 +34,7 @@ public class LocationController {
 
     @GetMapping
     public ResponseEntity<List<LocationDTO>> getLocations(@RequestParam int pageNumber, @RequestParam int pageSize) {
-        return new ResponseEntity<>(locationService.getAllLocations(PageRequest.of(pageNumber, pageSize))
+        return new ResponseEntity<>(locationService.getLocations(PageRequest.of(pageNumber, pageSize))
                 .stream().map(locationMapper::toDto).toList(), HttpStatus.OK);
     }
 

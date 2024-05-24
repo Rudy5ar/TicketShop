@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `ticket_shop`.`Ticket`
     `status`           INT         NOT NULL,
     `type`             VARCHAR(45) NOT NULL,
     `manifestation_id` BIGINT,
-    `user_id`          BIGINT
+    `user_id_buyer`    BIGINT
 );
 
 ALTER TABLE `Manifestation`

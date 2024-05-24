@@ -1,15 +1,17 @@
 package org.ticketshop.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.GenerationType;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -21,31 +23,21 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Size(max = 45)
-    @NotNull
     @Column(name = "username", nullable = false, length = 45)
     private String username;
 
-    @Size(max = 45)
-    @NotNull
     @Column(name = "password", nullable = false, length = 45)
     private String password;
 
-    @Size(max = 45)
-    @NotNull
     @Column(name = "first_name", nullable = false, length = 45)
     private String firstName;
 
-    @Size(max = 45)
-    @NotNull
     @Column(name = "last_name", nullable = false, length = 45)
     private String lastName;
 
     @Column(name = "reward_points")
     private Integer rewardPoints;
 
-    @Size(max = 45)
-    @NotNull
     @Column(name = "user_type", nullable = false, length = 45)
     private String userType;
 
