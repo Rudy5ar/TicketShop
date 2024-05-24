@@ -1,12 +1,10 @@
 package org.ticketshop.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ticketshop.dto.SearchDTO;
 import org.ticketshop.model.Manifestation;
 import org.ticketshop.repository.ManifestationRepository;
 
@@ -26,7 +24,7 @@ public class ManifestationService {
 
     @Transactional(readOnly = true)
     public List<Manifestation> getAllManifestation() {
-        return manifestationRepository.findAll();
+        return manifestationRepository.findAll().reversed();
     }
 
     @Transactional(readOnly = true)
@@ -46,21 +44,19 @@ public class ManifestationService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Manifestation> getSortedPage(String sortBy, int pageNumber, int pageSize) {
-        if (sortBy.equals("name") || sortBy.equals("priceRegular") || sortBy.equals("date") || sortBy.equals("location")) {
-            return manifestationRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(sortBy)));
-        }
-        return null;
-    }
+    public Page<Manifestation> search(SearchDTO searchDTO, int pageNumber, int pageSize) {
+        String sortBy = searchDTO.sortBy()
+                .filter(sort -> sort.equals("name") || sort.equals("priceRegular") || sort.equals("date") || sort.equals("location") )
+                .orElse("id");
+        Sort.Direction direction = searchDTO.isDescending() ? Sort.Direction.DESC : Sort.Direction.ASC;
 
-    @Transactional(readOnly = true)
-    public List<Manifestation> filterByType(List<Manifestation> listOfManifestations, int type) {
-        return listOfManifestations.stream().filter(m -> m.getType() == type).toList();
-    }
 
-    @Transactional(readOnly = true)
-    public List<Manifestation> searchByName(String name, int pageNumber, int pageSize) {
-        return manifestationRepository.findAllByName(name, PageRequest.of(pageNumber, pageSize));
+        return manifestationRepository.findAllByNameStartingWithAndTypeStartingWithAndPriceRegularBetween(
+                                                        searchDTO.name().orElse("")
+                                                        ,searchDTO.filterType().orElse("")
+                                                        ,searchDTO.priceLow().orElse(Integer.MIN_VALUE)
+                                                        ,searchDTO.priceHigh().orElse(Integer.MAX_VALUE)
+                                                        ,PageRequest.of(pageNumber, pageSize, direction, sortBy));
     }
 
 }

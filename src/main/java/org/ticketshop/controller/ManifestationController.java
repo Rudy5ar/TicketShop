@@ -1,11 +1,11 @@
 package org.ticketshop.controller;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.ticketshop.dto.ManifestationDTO;
+import org.ticketshop.dto.SearchDTO;
 import org.ticketshop.mapper.ManifestationMapper;
 import org.ticketshop.model.Manifestation;
 import org.ticketshop.service.ManifestationService;
@@ -34,8 +34,9 @@ public class ManifestationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Manifestation>> getAllManifestation() {
-        return new ResponseEntity<>(manifestationService.getAllManifestation(), HttpStatus.OK);
+    public ResponseEntity<List<ManifestationDTO>> getAllManifestation() {
+        ManifestationMapper mapper = new ManifestationMapper();
+        return new ResponseEntity<>(manifestationService.getAllManifestation().stream().map(mapper::toDto).toList(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -63,26 +64,11 @@ public class ManifestationController {
         manifestationService.deleteManifestationById(id);
     }
 
-    @GetMapping("/getSorted")
-    public ResponseEntity<List<Manifestation>> getSortedManifestation(@RequestParam("sortBy") String sortBy,
-                                                                      @RequestParam("pageNumber") int pageNumber,
-                                                                      @RequestParam("pageSize") int pageSize) {
-        return new ResponseEntity<>(manifestationService.getSorted(sortBy, pageNumber, pageSize), HttpStatus.OK);
-    }
-
-    @GetMapping("/getFilteredByType")
-    public ResponseEntity<List<Manifestation>> filterByType(@RequestParam("type") int type){
-        return new ResponseEntity<>(manifestationService.
-                                    filterByType(manifestationService.getAllManifestation(), type),
-                    HttpStatus.OK);
-    }
-
-    @GetMapping("/searchByName")
-    public ResponseEntity<List<Manifestation>> searchByName(@RequestParam("name") String name,
+    @GetMapping("/search")
+    public ResponseEntity<Page<Manifestation>> search(@RequestBody SearchDTO searchDTO,
                                                             @RequestParam("pageNumber") int pageNumber,
                                                             @RequestParam("pageSize") int pageSize) {
-
-        return new ResponseEntity<>(manifestationService.searchByName(name, pageNumber, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(manifestationService.search(searchDTO, pageNumber, pageSize), HttpStatus.OK);
 
     }
 }

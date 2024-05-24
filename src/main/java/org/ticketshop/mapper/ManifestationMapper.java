@@ -14,7 +14,6 @@ public class ManifestationMapper {
                 .priceRegular(m.getPriceRegular())
                 .date(m.getDate())
                 .type(m.getType())
-                .location(m.getLocation())
                 .build();
     }
 
@@ -23,7 +22,6 @@ public class ManifestationMapper {
                 .name(dto.name())
                 .numOfSeats(dto.numOfSeats())
                 .priceRegular(dto.priceRegular())
-                .location(dto.location())
                 .date(dto.date())
                 .build();
     }
