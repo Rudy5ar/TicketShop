@@ -27,7 +27,6 @@ public class ManifestationController {
     public ResponseEntity<Manifestation> createManifestation(@RequestBody ManifestationDTO manifestationDTO) {
         try {
             Manifestation toSave = manifestationMapper.fromDto(manifestationDTO);
-            toSave.setStatus(0);
             Manifestation savedManifestation = manifestationService.createManifestation(toSave);
             return new ResponseEntity<>(savedManifestation, HttpStatus.CREATED);
         } catch (Exception e) {
