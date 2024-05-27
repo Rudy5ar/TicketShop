@@ -34,7 +34,7 @@ public class LocationService {
 
     @Transactional
     public Location updateLocation(Long id, Location location){
-        locationRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("No location found with id: " + id));
+        getLocation(id);
         return locationRepository.save(location);
     }
 
