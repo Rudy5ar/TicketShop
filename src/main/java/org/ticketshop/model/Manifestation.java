@@ -48,7 +48,8 @@ public class Manifestation {
     private BigDecimal priceRegular;
 
     @Column(name = "status")
-    private Integer status;
+    @Builder.Default
+    private String status = "innactive";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
