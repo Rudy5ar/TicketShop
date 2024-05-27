@@ -23,6 +23,7 @@ public class ManifestationMapper {
                 .numOfSeats(dto.numOfSeats())
                 .priceRegular(dto.priceRegular())
                 .date(dto.date())
+                .type(dto.type())
                 .build();
     }
 }

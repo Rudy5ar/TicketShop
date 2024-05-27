@@ -2,7 +2,6 @@ package org.ticketshop.controller;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.ticketshop.dto.LocationDTO;
@@ -59,7 +58,7 @@ public class LocationController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void deleteLocation(@PathVariable long id) {
         locationService.deleteLocationById(id);
     }
