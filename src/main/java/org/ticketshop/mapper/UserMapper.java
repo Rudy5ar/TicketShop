@@ -12,7 +12,7 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .rewardPoints(user.getRewardPoints())
-                .username(user.getUserType())
+                .username(user.getUsername())
                 .userType(user.getUserType())
                 .password(user.getPassword())
                 .build();
