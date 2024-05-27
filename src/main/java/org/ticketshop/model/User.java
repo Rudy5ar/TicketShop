@@ -21,7 +21,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private BigDecimal id;
+    private Long id;
 
     @Size(max = 45)
     @NotNull
