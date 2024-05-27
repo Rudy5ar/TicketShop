@@ -14,6 +14,9 @@ public class ManifestationMapper {
                 .priceRegular(m.getPriceRegular())
                 .date(m.getDate())
                 .type(m.getType())
+                .numOfRegularTickets(m.getNumOfRegularTickets())
+                .numOfFanpitTickets(m.getNumOfFanpitTickets())
+                .numOfVipTickets(m.getNumOfVipTickets())
                 .build();
     }
 
@@ -24,6 +27,9 @@ public class ManifestationMapper {
                 .priceRegular(dto.priceRegular())
                 .date(dto.date())
                 .type(dto.type())
+                .numOfFanpitTickets(dto.numOfFanpitTickets())
+                .numOfRegularTickets(dto.numOfRegularTickets())
+                .numOfVipTickets(dto.numOfVipTickets())
                 .build();
     }
 }

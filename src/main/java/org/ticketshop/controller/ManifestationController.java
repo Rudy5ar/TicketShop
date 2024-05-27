@@ -19,7 +19,7 @@ public class ManifestationController {
     private final ManifestationService manifestationService;
     private final ManifestationMapper manifestationMapper;
 
-    public ManifestationController(ManifestationService service, ManifestationMapper mapper){
+    public ManifestationController(ManifestationService service, ManifestationMapper mapper) {
         this.manifestationService = service;
         this.manifestationMapper = mapper;
     }
@@ -66,8 +66,8 @@ public class ManifestationController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<Manifestation>> search(@RequestBody SearchDTO searchDTO,
-                                                            @RequestParam("pageNumber") int pageNumber,
-                                                            @RequestParam("pageSize") int pageSize) {
+                                                      @RequestParam("pageNumber") int pageNumber,
+                                                      @RequestParam("pageSize") int pageSize) {
         return new ResponseEntity<>(manifestationService.search(searchDTO, pageNumber, pageSize), HttpStatus.OK);
     }
 
