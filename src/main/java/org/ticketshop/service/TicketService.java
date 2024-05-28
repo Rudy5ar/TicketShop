@@ -155,4 +155,14 @@ public class TicketService {
         userRepository.save(user);
         return ticketDTOs;
     }
+
+    public List<Ticket> cancelTickets(Long userId, Long manifestationId) {
+        User user = userService.getUser(userId);
+        for(Ticket ticket : user.getTickets()){
+            if(ticket.getManifestation().getId().equals(manifestationId) && ticket.getStatus() == 1){
+                ticketRepository.delete(ticket);
+            }
+        }
+        return user.getTickets();
+    }
 }
