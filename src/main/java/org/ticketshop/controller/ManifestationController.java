@@ -1,5 +1,6 @@
 package org.ticketshop.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ManifestationController {
     private final ManifestationService manifestationService;
     private final ManifestationMapper manifestationMapper;
 
-    public ManifestationController(ManifestationService service, ManifestationMapper mapper){
+    public ManifestationController(ManifestationService service, ManifestationMapper mapper) {
         this.manifestationService = service;
         this.manifestationMapper = mapper;
     }
@@ -65,9 +66,22 @@ public class ManifestationController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<Manifestation>> search(@RequestBody SearchDTO searchDTO,
-                                                            @RequestParam("pageNumber") int pageNumber,
-                                                            @RequestParam("pageSize") int pageSize) {
+                                                      @RequestParam("pageNumber") int pageNumber,
+                                                      @RequestParam("pageSize") int pageSize) {
         return new ResponseEntity<>(manifestationService.search(searchDTO, pageNumber, pageSize), HttpStatus.OK);
+    }
 
+    @PutMapping("/approveManifestation")
+    public ResponseEntity<Manifestation> approveManifestation(@RequestParam Long manifestationId) {
+        try {
+            return new ResponseEntity<>(manifestationService.approveManifestation(manifestationId), HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/sellerAddManifestation")
+    public ResponseEntity<ManifestationDTO> sellerAddManifestation(@RequestBody ManifestationDTO manifestationDTO, @RequestParam Long locationId, @RequestParam Long userId) {
+        return new ResponseEntity<>(manifestationMapper.toDto(manifestationService.sellerAddManifestation(manifestationMapper.fromDto(manifestationDTO), locationId, userId)), HttpStatus.OK);
     }
 }

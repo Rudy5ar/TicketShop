@@ -48,7 +48,8 @@ public class Manifestation {
     private BigDecimal priceRegular;
 
     @Column(name = "status")
-    private Integer status;
+    @Builder.Default
+    private String status = "innactive";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
@@ -60,5 +61,14 @@ public class Manifestation {
 
     @OneToMany(mappedBy = "manifestation")
     private List<Ticket> tickets;
+
+    @Column(name = "num_of_regular_tickets")
+    private Integer numOfRegularTickets;
+
+    @Column(name = "num_of_fanpit_tickets")
+    private Integer numOfFanpitTickets;
+
+    @Column(name = "num_of_vip_tickets")
+    private Integer numOfVipTickets;
 
 }
