@@ -68,7 +68,7 @@ public class TicketController {
         ticketService.deleteTicket(id);
     }
 
-    @PostMapping("/buyTickets")
+    @PostMapping("/reserveTickets")
     public ResponseEntity<BoughtTicketDTO> reserveTickets(@RequestBody SendBuyInfoDTO sendBuyInfoDTO) {
         return new ResponseEntity<>(ticketService.reserveTickets(sendBuyInfoDTO.numRegular(), sendBuyInfoDTO.numFan(),
                                     sendBuyInfoDTO.numVip(), sendBuyInfoDTO.manifestationId(), sendBuyInfoDTO.buyerId()),

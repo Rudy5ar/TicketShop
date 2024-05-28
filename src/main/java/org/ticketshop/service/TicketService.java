@@ -70,6 +70,17 @@ public class TicketService {
         BigDecimal priceFan = BigDecimal.valueOf(numFan).multiply(manifestation.getPriceRegular().multiply(PRICE_FAN_PIT));
         BigDecimal priceVip = BigDecimal.valueOf(numVip).multiply(manifestation.getPriceRegular().multiply(PRICE_VIP));
 
+        createBoughtTickets(numRegular, numFan, numVip, buyerId, manifestation);
+
+        manifestation.setNumOfRegularTickets(manifestation.getNumOfRegularTickets() - numRegular);
+        manifestation.setNumOfFanpitTickets(manifestation.getNumOfFanpitTickets() - numFan);
+        manifestation.setNumOfVipTickets(manifestation.getNumOfVipTickets() - numVip);
+        manifestationService.updateManifestation(manifestation, manifestationId);
+
+        return boughtTicketMapper.toDto(numRegular, numFan, numVip, priceRegular.add(priceFan).add(priceVip));
+    }
+
+    private void createBoughtTickets(int numRegular, int numFan, int numVip, Long buyerId, Manifestation manifestation) {
         for (int i = 0; i < numRegular; i++){
             ticketRepository.save(Ticket.builder()
                             .date(LocalDateTime.now())
@@ -102,13 +113,6 @@ public class TicketService {
                     .manifestation(manifestation)
                     .build());
         }
-
-        manifestation.setNumOfRegularTickets(manifestation.getNumOfRegularTickets() - numRegular);
-        manifestation.setNumOfFanpitTickets(manifestation.getNumOfFanpitTickets() - numFan);
-        manifestation.setNumOfVipTickets(manifestation.getNumOfVipTickets() - numVip);
-        manifestationService.updateManifestation(manifestation, manifestationId);
-
-        return boughtTicketMapper.toDto(numRegular, numFan, numVip, priceRegular.add(priceFan).add(priceVip));
     }
 
 }
