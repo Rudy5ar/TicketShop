@@ -4,7 +4,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.ticketshop.dto.BoughtTicketDTO;
+import org.ticketshop.dto.SendBuyInfoDTO;
 import org.ticketshop.dto.TicketDTO;
+import org.ticketshop.mapper.SendBuyInfoMapper;
 import org.ticketshop.mapper.TicketMapper;
 import org.ticketshop.model.Ticket;
 import org.ticketshop.service.TicketService;
@@ -17,10 +20,12 @@ public class TicketController {
 
     private final TicketService ticketService;
     private final TicketMapper ticketMapper;
+    private final SendBuyInfoMapper sendBuyInfoMapper;
 
-    public TicketController(TicketService ticketService, TicketMapper ticketMapper) {
+    public TicketController(TicketService ticketService, TicketMapper ticketMapper, SendBuyInfoMapper sendBuyInfoMapper) {
         this.ticketService = ticketService;
         this.ticketMapper = ticketMapper;
+        this.sendBuyInfoMapper = sendBuyInfoMapper;
     }
 
     @GetMapping("/{id}")
@@ -61,6 +66,13 @@ public class TicketController {
     @DeleteMapping("/{id}")
     public void deleteTicket(@PathVariable long id) {
         ticketService.deleteTicket(id);
+    }
+
+    @PostMapping("/buyTickets")
+    public ResponseEntity<BoughtTicketDTO> reserveTickets(@RequestBody SendBuyInfoDTO sendBuyInfoDTO) {
+        return new ResponseEntity<>(ticketService.reserveTickets(sendBuyInfoDTO.numRegular(), sendBuyInfoDTO.numFan(),
+                                    sendBuyInfoDTO.numVip(), sendBuyInfoDTO.manifestationId(), sendBuyInfoDTO.buyerId()),
+                                    HttpStatus.OK);
     }
 
 }
