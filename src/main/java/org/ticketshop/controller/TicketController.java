@@ -5,10 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.ticketshop.dto.BoughtTicketDTO;
+import org.ticketshop.dto.CancelTicketDTO;
 import org.ticketshop.dto.SendBuyInfoDTO;
 import org.ticketshop.dto.TicketDTO;
 import org.ticketshop.mapper.SendBuyInfoMapper;
 import org.ticketshop.mapper.TicketMapper;
+import org.ticketshop.model.Manifestation;
 import org.ticketshop.model.Ticket;
 import org.ticketshop.service.TicketService;
 
@@ -75,9 +77,14 @@ public class TicketController {
                                     HttpStatus.OK);
     }
 
-     @PostMapping("/buyReservedTickets")
+    @PostMapping("/buyReservedTickets")
     public ResponseEntity<List<TicketDTO>> buyReservedTickets(@RequestParam Long userId) {
         return new ResponseEntity<>(ticketService.buyReservedTickets(userId), HttpStatus.OK);
+     }
+
+     @DeleteMapping("/cancelTickets")
+    public ResponseEntity<List<Ticket>> cancelTickets(@RequestBody CancelTicketDTO cancelTicketDTO) {
+        return new ResponseEntity<>(ticketService.cancelTickets(cancelTicketDTO.userId(), cancelTicketDTO.manifestationId()), HttpStatus.OK);
      }
 
 }
