@@ -6,31 +6,46 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ticketshop.dto.BoughtTicketDTO;
+import org.ticketshop.dto.TicketDTO;
 import org.ticketshop.mapper.BoughtTicketMapper;
+import org.ticketshop.mapper.TicketMapper;
 import org.ticketshop.model.Manifestation;
 import org.ticketshop.model.Ticket;
+import org.ticketshop.model.User;
 import org.ticketshop.repository.TicketRepository;
+import org.ticketshop.repository.UserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TicketService {
+
+    private final BigDecimal PRICE_FAN_PIT = BigDecimal.valueOf(2);
+    private final BigDecimal PRICE_VIP = BigDecimal.valueOf(4);
+    private final int REWARD_REGULAR = 50;
+    private final int REWARD_FAN_PIT = 100;
+    private final int REWARD_VIP = 200;
+
 
     private final TicketRepository ticketRepository;
     private final UserService userService;
     private final ManifestationService manifestationService;
     private final BoughtTicketMapper boughtTicketMapper;
-    private final BigDecimal PRICE_FAN_PIT = BigDecimal.valueOf(2);
-    private final BigDecimal PRICE_VIP = BigDecimal.valueOf(4);
+    private final TicketMapper ticketMapper;
+    private final UserRepository userRepository;
 
-    public TicketService(TicketRepository ticketRepository,  UserService userService,
+    public TicketService(TicketRepository ticketRepository, UserService userService,
                          ManifestationService manifestationService,
-                         BoughtTicketMapper boughtTicketMapper) {
+                         BoughtTicketMapper boughtTicketMapper, TicketMapper ticketMapper, UserRepository userRepository) {
         this.ticketRepository = ticketRepository;
         this.userService = userService;
         this.manifestationService = manifestationService;
         this.boughtTicketMapper = boughtTicketMapper;
+        this.ticketMapper = ticketMapper;
+        this.userRepository = userRepository;
     }
 
     @Transactional(readOnly = true)
@@ -115,4 +130,29 @@ public class TicketService {
         }
     }
 
+    public List<TicketDTO> buyReservedTickets(Long userId) {
+        User user = userService.getUser(userId);
+        List<Ticket> usersTickets = user.getTickets();
+        List<TicketDTO> ticketDTOs = new ArrayList<>();
+        for(Ticket ticket : usersTickets){
+            if(ticket.getStatus() == 1){
+                ticket.setStatus(2);
+                switch (ticket.getType()){
+                    case "regular":
+                        user.setRewardPoints(user.getRewardPoints() + REWARD_REGULAR);
+                        break;
+                    case "fan_pit":
+                        user.setRewardPoints(user.getRewardPoints() + REWARD_FAN_PIT);
+                        break;
+                    case "vip":
+                        user.setRewardPoints(user.getRewardPoints() + REWARD_VIP);
+                        break;
+                }
+                ticketRepository.save(ticket);
+                ticketDTOs.add(ticketMapper.toDto(ticket));
+            }
+        }
+        userRepository.save(user);
+        return ticketDTOs;
+    }
 }

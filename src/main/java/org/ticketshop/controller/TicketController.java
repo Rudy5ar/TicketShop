@@ -75,4 +75,9 @@ public class TicketController {
                                     HttpStatus.OK);
     }
 
+     @PostMapping("/buyReservedTickets")
+    public ResponseEntity<List<TicketDTO>> buyReservedTickets(@RequestParam Long userId) {
+        return new ResponseEntity<>(ticketService.buyReservedTickets(userId), HttpStatus.OK);
+     }
+
 }
