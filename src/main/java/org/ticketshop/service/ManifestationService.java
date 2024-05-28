@@ -78,8 +78,6 @@ public class ManifestationService {
             manifestation.setUserSeller(userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User for manifestation not found")));
 
             manifestationRepository.save(manifestation);
-
-            return manifestation;
         }
         return manifestation;
     }
