@@ -6,10 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ticketshop.dto.BoughtTicketDTO;
-import org.ticketshop.dto.SendBuyInfoDTO;
 import org.ticketshop.mapper.BoughtTicketMapper;
-import org.ticketshop.mapper.SendBuyInfoMapper;
-import org.ticketshop.mapper.TicketMapper;
 import org.ticketshop.model.Manifestation;
 import org.ticketshop.model.Ticket;
 import org.ticketshop.repository.TicketRepository;
@@ -27,8 +24,8 @@ public class TicketService {
     private final BigDecimal PRICE_FAN_PIT = BigDecimal.valueOf(2);
     private final BigDecimal PRICE_VIP = BigDecimal.valueOf(4);
 
-    public TicketService(TicketRepository ticketRepository, TicketMapper ticketMapper, UserService userService,
-                         ManifestationService manifestationService, SendBuyInfoMapper sendBuyInfoMapper,
+    public TicketService(TicketRepository ticketRepository,  UserService userService,
+                         ManifestationService manifestationService,
                          BoughtTicketMapper boughtTicketMapper) {
         this.ticketRepository = ticketRepository;
         this.userService = userService;
@@ -64,6 +61,9 @@ public class TicketService {
 
     public BoughtTicketDTO reserveTickets(int numRegular, int numFan, int numVip, Long manifestationId, Long buyerId) {
         Manifestation manifestation = manifestationService.getManifestation(manifestationId);
+        if(manifestation.getNumOfRegularTickets() < numRegular || manifestation.getNumOfFanpitTickets() < numFan || manifestation.getNumOfVipTickets() < numVip){
+            throw new RuntimeException("Not enough tickets to reserve");
+        }
         userService.getUser(buyerId);
 
         BigDecimal priceRegular = BigDecimal.valueOf(numRegular).multiply(manifestation.getPriceRegular());
@@ -79,17 +79,6 @@ public class TicketService {
                             .user(userService.getUser(buyerId))
                             .manifestation(manifestation)
                             .build());
-        }
-
-        for (int i = 0; i < numRegular; i++){
-            ticketRepository.save(Ticket.builder()
-                    .date(LocalDateTime.now())
-                    .price(manifestation.getPriceRegular())
-                    .status(1)
-                    .type("regular")
-                    .user(userService.getUser(buyerId))
-                    .manifestation(manifestation)
-                    .build());
         }
 
         for (int i = 0; i < numFan; i++){
@@ -113,6 +102,11 @@ public class TicketService {
                     .manifestation(manifestation)
                     .build());
         }
+
+        manifestation.setNumOfRegularTickets(manifestation.getNumOfRegularTickets() - numRegular);
+        manifestation.setNumOfFanpitTickets(manifestation.getNumOfFanpitTickets() - numFan);
+        manifestation.setNumOfVipTickets(manifestation.getNumOfVipTickets() - numVip);
+        manifestationService.updateManifestation(manifestation, manifestationId);
 
         return boughtTicketMapper.toDto(numRegular, numFan, numVip, priceRegular.add(priceFan).add(priceVip));
     }
