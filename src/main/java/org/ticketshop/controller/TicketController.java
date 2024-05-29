@@ -4,11 +4,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.ticketshop.dto.BoughtTicketDTO;
+import org.ticketshop.dto.ReservedTicketDTO;
 import org.ticketshop.dto.CancelTicketDTO;
-import org.ticketshop.dto.SendBuyInfoDTO;
+import org.ticketshop.dto.CancelTicketDTO;
+import org.ticketshop.dto.SendReserveInfoDTO;
 import org.ticketshop.dto.TicketDTO;
-import org.ticketshop.mapper.SendBuyInfoMapper;
+import org.ticketshop.mapper.SendReserveInfoMapper;
 import org.ticketshop.mapper.TicketMapper;
 import org.ticketshop.model.Manifestation;
 import org.ticketshop.model.Ticket;
@@ -22,12 +23,12 @@ public class TicketController {
 
     private final TicketService ticketService;
     private final TicketMapper ticketMapper;
-    private final SendBuyInfoMapper sendBuyInfoMapper;
+    private final SendReserveInfoMapper sendReserveInfoMapper;
 
-    public TicketController(TicketService ticketService, TicketMapper ticketMapper, SendBuyInfoMapper sendBuyInfoMapper) {
+    public TicketController(TicketService ticketService, TicketMapper ticketMapper, SendReserveInfoMapper sendReserveInfoMapper) {
         this.ticketService = ticketService;
         this.ticketMapper = ticketMapper;
-        this.sendBuyInfoMapper = sendBuyInfoMapper;
+        this.sendReserveInfoMapper = sendReserveInfoMapper;
     }
 
     @GetMapping("/{id}")
@@ -71,9 +72,8 @@ public class TicketController {
     }
 
     @PostMapping("/reserveTickets")
-    public ResponseEntity<BoughtTicketDTO> reserveTickets(@RequestBody SendBuyInfoDTO sendBuyInfoDTO) {
-        return new ResponseEntity<>(ticketService.reserveTickets(sendBuyInfoDTO.numRegular(), sendBuyInfoDTO.numFan(),
-                                    sendBuyInfoDTO.numVip(), sendBuyInfoDTO.manifestationId(), sendBuyInfoDTO.buyerId()),
+    public ResponseEntity<ReservedTicketDTO> reserveTickets(@RequestBody SendReserveInfoDTO sendReserveInfoDTO) {
+        return new ResponseEntity<>(ticketService.reserveTickets(sendReserveInfoDTO),
                                     HttpStatus.OK);
     }
 
