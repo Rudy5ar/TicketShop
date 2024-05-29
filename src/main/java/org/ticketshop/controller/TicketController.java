@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.ticketshop.dto.ReservedTicketDTO;
 import org.ticketshop.dto.CancelTicketDTO;
 import org.ticketshop.dto.CancelTicketDTO;
+import org.ticketshop.dto.CancelTicketDTO;
 import org.ticketshop.dto.SendReserveInfoDTO;
 import org.ticketshop.dto.TicketDTO;
 import org.ticketshop.mapper.SendReserveInfoMapper;
