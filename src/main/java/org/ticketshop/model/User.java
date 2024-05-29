@@ -7,8 +7,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.GenerationType;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,6 +16,9 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "user")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
