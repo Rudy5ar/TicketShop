@@ -5,12 +5,13 @@ import org.ticketshop.dto.ReservedTicketDTO;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ReservedTicketMapper {
-    public ReservedTicketDTO toDto(HashMap<String, Integer> reservedTickets, BigDecimal finalPrice) {
+    public ReservedTicketDTO toDto(Map<String, Integer> reservedTickets, BigDecimal finalPrice) {
         return ReservedTicketDTO.builder()
-                .reservedTickets(reservedTickets)
+                .reservedTickets((HashMap<String, Integer>) reservedTickets)
                 .finalPrice(finalPrice)
                 .build();
     }

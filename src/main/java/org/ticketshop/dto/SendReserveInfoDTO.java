@@ -2,8 +2,8 @@ package org.ticketshop.dto;
 
 import lombok.Builder;
 
-import java.util.HashMap;
+import java.util.Map;
 
 @Builder
-public record SendReserveInfoDTO(HashMap<String, Integer> ticketsToReserve, Long manifestationId, Long buyerId) {
+public record SendReserveInfoDTO(Map<String, Integer> ticketsToReserve, Long manifestationId, Long buyerId) {
 }
