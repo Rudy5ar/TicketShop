@@ -6,13 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.ticketshop.dto.ReservedTicketDTO;
 import org.ticketshop.dto.CancelTicketDTO;
-import org.ticketshop.dto.CancelTicketDTO;
-import org.ticketshop.dto.CancelTicketDTO;
 import org.ticketshop.dto.SendReserveInfoDTO;
 import org.ticketshop.dto.TicketDTO;
 import org.ticketshop.mapper.SendReserveInfoMapper;
 import org.ticketshop.mapper.TicketMapper;
-import org.ticketshop.model.Manifestation;
 import org.ticketshop.model.Ticket;
 import org.ticketshop.service.TicketService;
 
