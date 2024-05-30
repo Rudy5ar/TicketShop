@@ -74,7 +74,7 @@ public class TicketService {
         ticketRepository.deleteById(id);
     }
 
-
+    @Transactional
     public ReservedTicketDTO reserveTickets(SendReserveInfoDTO sendReserveInfoDTO) {
         Manifestation manifestation = manifestationService.getManifestation(sendReserveInfoDTO.manifestationId());
         int numRegular = sendReserveInfoDTO.ticketsToReserve().get("regular");
@@ -119,7 +119,7 @@ public class TicketService {
         };
     }
 
-
+    @Transactional
     public List<TicketDTO> buyReservedTickets(Long userId) {
         User user = userService.getUser(userId);
         List<Ticket> usersTickets = user.getTickets();
@@ -146,13 +146,10 @@ public class TicketService {
         return ticketDTOs;
     }
 
-    public List<Ticket> cancelTickets(Long userId, Long manifestationId) {
-        User user = userService.getUser(userId);
-        for(Ticket ticket : user.getTickets()){
-            if(ticket.getManifestation().getId().equals(manifestationId) && ticket.getStatus() == 1){
-                ticketRepository.delete(ticket);
-            }
-        }
-        return user.getTickets();
+    public void cancelTickets(Long userId, Long manifestationId) {
+        ticketRepository.deleteAll(userService.getUser(userId).getTickets()
+                .stream()
+                .filter(ticket -> ticket.getStatus() == 1 && ticket.getManifestation().getId().equals(manifestationId))
+                .toList());
     }
 }

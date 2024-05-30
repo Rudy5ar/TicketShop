@@ -49,7 +49,7 @@ public class TicketController {
         try {
             Ticket savedTicket = ticketService.saveTicket(ticketMapper.fromDto(ticketDTO));
             return new ResponseEntity<>(ticketMapper.toDto(savedTicket), HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -59,7 +59,7 @@ public class TicketController {
         try {
             Ticket updatedTicket = ticketService.updateTicket(id, ticketMapper.fromDto(ticketDTO));
             return new ResponseEntity<>(ticketMapper.toDto(updatedTicket), HttpStatus.OK);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -72,17 +72,18 @@ public class TicketController {
     @PostMapping("/reserveTickets")
     public ResponseEntity<ReservedTicketDTO> reserveTickets(@RequestBody SendReserveInfoDTO sendReserveInfoDTO) {
         return new ResponseEntity<>(ticketService.reserveTickets(sendReserveInfoDTO),
-                                    HttpStatus.OK);
+                HttpStatus.OK);
     }
 
     @PostMapping("/buyReservedTickets")
     public ResponseEntity<List<TicketDTO>> buyReservedTickets(@RequestParam Long userId) {
         return new ResponseEntity<>(ticketService.buyReservedTickets(userId), HttpStatus.OK);
-     }
+    }
 
-     @DeleteMapping("/cancelTickets")
-    public ResponseEntity<List<Ticket>> cancelTickets(@RequestBody CancelTicketDTO cancelTicketDTO) {
-        return new ResponseEntity<>(ticketService.cancelTickets(cancelTicketDTO.userId(), cancelTicketDTO.manifestationId()), HttpStatus.OK);
-     }
+    @DeleteMapping("/cancelTickets")
+    public ResponseEntity<List<TicketDTO>> cancelTickets(@RequestBody CancelTicketDTO cancelTicketDTO) {
+        ticketService.cancelTickets(cancelTicketDTO.userId(), cancelTicketDTO.manifestationId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
