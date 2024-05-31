@@ -20,9 +20,9 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "user")
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +46,10 @@ public class User {
 
     @Column(name = "user_type", nullable = false, length = 45)
     private String userType;
+
+    @Builder.Default
+    @Column(name = "cancelations")
+    private Integer cancelations = 0;
 
     @OneToMany(mappedBy = "userSeller")
     private List<Manifestation> manifestations;
