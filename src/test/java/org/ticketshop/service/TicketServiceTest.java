@@ -81,7 +81,7 @@ public class TicketServiceTest {
 
     @Test
     void testReserveTickets(){
-        User user = new User(16L, "ime", "pass", "prvo", "drugo", 10, "buyer", null, null);
+        User user = new User(16L, "ime", "pass", "prvo", "drugo", 10, "buyer", 0, null, null);
 
         Manifestation manifestation = Manifestation.builder()
                 .id(16L)

@@ -89,32 +89,45 @@ public class TicketService {
 
         User user = userService.getUser(sendReserveInfoDTO.buyerId());
 
-        sendReserveInfoDTO.ticketsToReserve().forEach((type, num) -> ticketRepository.save(Ticket.builder()
-                        .type(type)
-                        .date(manifestation.getDate())
-                        .price(getPrice(type, manifestation))
-                        .status(1)
-                        .manifestation(manifestation)
-                        .user(user)
-                        .build()));
+        sendReserveInfoDTO.ticketsToReserve().forEach((type, num) ->
+                {
+                    for (int i = 0; i < num; i++) {
+                        ticketRepository.save(Ticket.builder()
+                                .type(type)
+                                .date(manifestation.getDate())
+                                .price(getPrice(type, manifestation, user.getRewardPoints()))
+                                .status(1)
+                                .manifestation(manifestation)
+                                .user(user)
+                                .build());
+                    }
+                });
+
 
         manifestation.setNumOfRegularTickets(manifestation.getNumOfRegularTickets() - numRegular);
         manifestation.setNumOfFanpitTickets(manifestation.getNumOfFanpitTickets() - numFan);
         manifestation.setNumOfVipTickets(manifestation.getNumOfVipTickets() - numVip);
         manifestationService.updateManifestation(manifestation, sendReserveInfoDTO.manifestationId());
 
-        BigDecimal finalPrice = getPrice("regular", manifestation)
-                .add(getPrice("fan_pit", manifestation))
-                .add(getPrice("vip", manifestation));
+        BigDecimal finalPrice = getPrice("regular", manifestation, user.getRewardPoints())
+                .add(getPrice("fan_pit", manifestation, user.getRewardPoints()))
+                .add(getPrice("vip", manifestation, user.getRewardPoints()));
 
         return reservedTicketMapper.toDto(sendReserveInfoDTO.ticketsToReserve(), finalPrice);
     }
 
-    private BigDecimal getPrice(String type, Manifestation manifestation) {
+    private BigDecimal getPrice(String type, Manifestation manifestation, int rewardPoints) {
+        BigDecimal discount = BigDecimal.valueOf(1);
+        if(rewardPoints >= 3000){
+            discount = BigDecimal.valueOf(0.97);
+        }
+        else if(rewardPoints >= 2000){
+            discount = BigDecimal.valueOf(0.95);
+        }
         return switch (type) {
-            case "regular" -> manifestation.getPriceRegular();
-            case "fan_pit" -> manifestation.getPriceRegular().multiply(PRICE_FAN_PIT);
-            case "vip" -> manifestation.getPriceRegular().multiply(PRICE_VIP);
+            case "regular" -> manifestation.getPriceRegular().multiply(discount);
+            case "fan_pit" -> manifestation.getPriceRegular().multiply(PRICE_FAN_PIT).multiply(discount);
+            case "vip" -> manifestation.getPriceRegular().multiply(PRICE_VIP).multiply(discount);
             default -> BigDecimal.valueOf(0);
         };
     }
@@ -147,9 +160,14 @@ public class TicketService {
     }
 
     public void cancelTickets(Long userId, Long manifestationId) {
-        ticketRepository.deleteAll(userService.getUser(userId).getTickets()
+        User user = userService.getUser(userId);
+        List<Ticket> toCancel = user.getTickets()
                 .stream()
                 .filter(ticket -> ticket.getStatus() == 1 && ticket.getManifestation().getId().equals(manifestationId))
-                .toList());
+                .toList();
+        user.setCancelations(user.getCancelations() + toCancel.size());
+        user.setRewardPoints(100 * toCancel.size());
+        userRepository.save(user);
+        ticketRepository.deleteAll(toCancel);
     }
 }
