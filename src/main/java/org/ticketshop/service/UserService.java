@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ticketshop.model.User;
 import org.ticketshop.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -38,5 +40,8 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long id) {userRepository.deleteById(id);}
+
+    @Transactional
+    public List<User> getSuspicious() {return userRepository.findAllByCancelationsGreaterThan(5);}
 
 }

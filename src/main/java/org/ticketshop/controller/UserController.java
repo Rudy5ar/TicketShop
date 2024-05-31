@@ -59,8 +59,13 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLocation(@PathVariable long id) {
+    public void deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
+    }
+
+    @GetMapping("/getSuspicious")
+    public List<UserDTO> getSuspiciousUsers() {
+        return userService.getSuspicious().stream().map(userMapper::toDto).toList();
     }
 
 }
